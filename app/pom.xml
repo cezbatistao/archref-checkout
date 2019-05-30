@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.archref</groupId>
+        <artifactId>archref-checkout</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>archref-checkout-app</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>App Architecture Reference with checkout example</name>
+    <description>App Architecture Reference Checkout</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <spring-cloud.version>Finchley.SR1</spring-cloud.version>
+        <springfox.swagger.version>2.9.2</springfox.swagger.version>
+
+        <ff4j.version>1.7.2</ff4j.version>
+        <thymeleaf.version>2.1.6.RELEASE</thymeleaf.version>
+
+        <archref-checkout-app-gateway.version>0.0.1-SNAPSHOT</archref-checkout-app-gateway.version>
+
+        <liquibase-core.version>3.6.3</liquibase-core.version>
+
+        <logback-gelf.version>0.3</logback-gelf.version>
+        <janino.version>2.7.5</janino.version>
+        <logstash-logback-encoder.version>4.10</logstash-logback-encoder.version>
+
+        <groovy-all.version>2.4.10</groovy-all.version>
+        <spock.core.version>1.1-groovy-2.4</spock.core.version>
+        <spock.reports.version>1.3.1</spock.reports.version>
+        <testcontainers-mysql.version>1.11.2</testcontainers-mysql.version>
+
+        <gmavenplus-plugin.version>1.4</gmavenplus-plugin.version>
+        <maven.surefire.version>2.20</maven.surefire.version>
+        <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
+        <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
+        <liquibase-maven-plugin.version>3.6.3</liquibase-maven-plugin.version>
+
+        <!-- Sonar config -->
+        <sonar.sources>src/main/java</sonar.sources>
+        <sonar.tests>src/test/groovy,src/test/java</sonar.tests>
+        <sonar.coverage.exclusions>
+            **/conf/**,
+            **/model/**,
+            **/domain/**,
+            **/json/**,
+            **/*Application*
+        </sonar.coverage.exclusions>
+        <sonar.exclusions>**/conf/**,**/model/**,**/domain/**,**/json/**,**/*Application*</sonar.exclusions>
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.java.binaries>target/classes</sonar.java.binaries>
+        <sonar.groovy.binaries>target/classes</sonar.groovy.binaries>
+
+        <argLine />
+        <build.number>SNAPSHOT</build.number>
+
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>lucyhr-api</id>
+            <name>lucyhr-api</name>
+            <url>git:releases://bitbucket.org/carlosz-cit/archref.git</url>
+        </repository>
+    </distributionManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <sonar.host.url>http://localhost:9000</sonar.host.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>dockerRun</id>
+            <properties>
+                <sonar.host.url>http://172.17.0.1:9000</sonar.host.url>
+            </properties>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Springfox Swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox.swagger.version}</version>
+        </dependency>
+
+        <!-- FF4J -->
+        <dependency>
+            <groupId>org.ff4j</groupId>
+            <artifactId>ff4j-core</artifactId>
+            <version>${ff4j.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>ff4j-web</artifactId>
+            <groupId>org.ff4j</groupId>
+            <version>${ff4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>jstl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.thymeleaf</groupId>
+                    <artifactId>thymeleaf</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.ff4j</groupId>
+            <artifactId>ff4j-aop</artifactId>
+            <version>${ff4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ff4j</groupId>
+            <artifactId>ff4j-store-redis</artifactId>
+            <version>${ff4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>${thymeleaf.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.archref</groupId>
+            <artifactId>archref-checkout-app-gateway</artifactId>
+            <version>${archref-checkout-app-gateway.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
+            <!-- Exclude older version of logback-core for conflicting with newer in spring-boot,
+            see https://github.com/logstash/logstash-logback-encoder/issues/153 -->
+            <exclusions>
+                <exclusion>
+                    <artifactId>logback-core</artifactId>
+                    <groupId>ch.qos.logback</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>me.moocar</groupId>
+            <artifactId>logback-gelf</artifactId>
+            <version>${logback-gelf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>${janino.version}</version>
+        </dependency>
+
+        <dependency> <!-- use a specific Groovy version rather than the one specified by spock-core -->
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy-all.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>${spock.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.athaydes</groupId>
+            <artifactId>spock-reports</artifactId>
+            <version>${spock.reports.version}</version>
+            <scope>test</scope>
+            <!-- this avoids affecting your version of Groovy/Spock -->
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mysql</artifactId>
+            <version>${testcontainers-mysql.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>archref-checkout</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>${gmavenplus-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- ################################################## JaCoCo Plugin ##################################-->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <!-- COMMON COVERAGE EXCLUSIONS -->
+                        <exclude>**/conf/**</exclude>
+                        <exclude>**/model/**</exclude>
+                        <exclude>**/domain/**</exclude>
+                        <exclude>**/json/**</exclude>
+                        <exclude>**/*Application.class</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>jacocoArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>jacoco-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>CLASS</element>
+                                    <excludes>
+                                        <!-- COMMON COVERAGE EXCLUSIONS -->
+                                        <exclude>**.*conf.**</exclude>
+                                        <exclude>**.*model.**</exclude>
+                                        <exclude>**.*domain.**</exclude>
+                                        <exclude>**.*json.**</exclude>
+                                        <exclude>**.*Application</exclude>
+                                    </excludes>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>1</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                            <skip>${skipTests}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- ################################################## Surefire ##################################-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <com.athaydes.spockframework.report.outputDir>target/spock
+                        </com.athaydes.spockframework.report.outputDir>
+                    </systemPropertyVariables>
+                    <includes>
+                        <include>**/*Spec.java</include>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <argLine>${argLine} ${jacocoArgLine}</argLine>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <configuration>
+                    <images>
+                        <image>
+                            <name>docker-virtual.art.local/archref:${build.number}</name>
+                            <alias>dockerfile</alias>
+                            <build>
+                                <!-- filter>@</filter-->
+                                <dockerFileDir>${project.basedir}</dockerFileDir>
+                                <assembly>
+                                    <descriptorRef>rootWar</descriptorRef>
+                                </assembly>
+                                <tags>
+                                    <tag>latest</tag>
+                                    <tag>${build.number}</tag>
+                                </tags>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>parse-versions-for-release</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                        <configuration>
+                            <propertyPrefix>parsedVersion</propertyPrefix>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase-maven-plugin.version}</version>
+
+                <configuration>
+                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

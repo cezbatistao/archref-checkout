@@ -1,0 +1,22 @@
+checkoutorder:
+  ribbon:
+    listOfServers: http://172.17.0.1:8383
+
+ff4j:
+  redis:
+    server: 172.17.0.1
+
+spring:
+  datasource:
+    url: jdbc:mysql://172.17.0.1:3306/app_test
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: checkout_passwd
+  jpa:
+    hibernate:
+      ddl-auto: none
+    databasePlatform: org.hibernate.dialect.MySQL57Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false

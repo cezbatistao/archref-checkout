@@ -1,0 +1,66 @@
+server:
+  port: 8383
+
+eureka:
+  instance:
+    instanceId: ${spring.application.instance-id:${random.value}}
+  client:
+    enabled: false
+    fetchRegistry: false
+    registerWithEureka: false
+
+sample-app:
+  async:
+    corePoolSize: 100
+  billet:
+    days-due-date: 7
+    addition-price: 3.25
+
+ribbon:
+  eureka:
+    enabled: false
+
+payment:
+  ribbon:
+    ReadTimeout: 30000
+    ConnectTimeout: 30000
+    listOfServers: http://localhost:8083
+
+feign:
+  hystrix:
+    enabled: true
+
+hystrix:
+ command:
+   viajemais:
+    execution.isolation.thread.timeoutInMilliseconds: 2000
+
+security:
+  basic:
+    enabled: false
+
+management:
+  security:
+    enabled: false
+
+spring:
+  application:
+    name: Sample App Checkout Architectural Reference
+    version: 1.0
+  thymeleaf:
+    enabled: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/app_development
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: checkout_passwd
+  jpa:
+    hibernate:
+      ddlAuto: none
+    databasePlatform: org.hibernate.dialect.MySQL57Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+  liquibase:
+    enabled: false

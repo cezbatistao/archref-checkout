@@ -1,0 +1,56 @@
+version: "3"
+
+services:
+  #Dynamodb
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=app_test
+      - MYSQL_ROOT_PASSWORD=checkout_passwd
+    volumes:
+      - mysql-datavolume-comptest:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    links:
+      - mysql
+    ports:
+      - 80:80
+    environment:
+      - PMA_ARBITRARY=1
+
+  # Redis
+  redis:
+    image: redis:3.2.4
+    ports:
+      - "6379:6379"
+  #Mocks
+  mocks:
+    build: ../dependencies/mocks
+    ports:
+      - "8081:8081"
+      - "8905:8905"
+      - "8083:8083"
+      - "8906:8906"
+      - "8084:8084"
+      - "8907:8907"
+
+  # Checkout Application
+  app:
+    build: ../app
+    links:
+      - "mysql"
+      - "redis"
+      - "mocks"
+    ports:
+      - "8080:8383"
+    environment:
+      - "SERVER_PORT:8080"
+      - "ff4j_redis_server=redis"
+      - "NEW_RELIC_ENV=dev"
+      - "SPRING_PROFILES_ACTIVE=docker"
+
+volumes:
+  mysql-datavolume-comptest:

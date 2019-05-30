@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.archref</groupId>
+        <artifactId>archref-checkout</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>archref-checkout-component-test</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Component Testing Architecture Reference</name>
+    <description>Component Testing for the Archref App</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <archref-checkout-app-gateway.version>0.0.1-SNAPSHOT</archref-checkout-app-gateway.version>
+
+        <ff4j.version>1.6.4</ff4j.version>
+
+        <cucumber.version>1.2.5</cucumber.version>
+        <rest-assured.version>3.3.0</rest-assured.version>
+
+        <!-- Scala config -->
+        <gatling.version>2.2.5</gatling.version>
+
+        <maven.compiler.version>3.3</maven.compiler.version>
+        <gatling-plugin.version>2.2.4</gatling-plugin.version>
+        <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.archref</groupId>
+            <artifactId>archref-checkout-app-gateway</artifactId>
+            <version>${archref-checkout-app-gateway.version}</version>
+        </dependency>
+
+        <!-- Fixture -->
+        <dependency>
+            <groupId>br.com.six2six</groupId>
+            <artifactId>fixture-factory</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- rest-assured -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- FF4J -->
+        <dependency>
+            <groupId>org.ff4j</groupId>
+            <artifactId>ff4j-core</artifactId>
+            <version>${ff4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ff4j</groupId>
+            <artifactId>ff4j-web</artifactId>
+            <version>${ff4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>jstl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.thymeleaf</groupId>
+                    <artifactId>thymeleaf</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.ff4j</groupId>
+            <artifactId>ff4j-aop</artifactId>
+            <version>${ff4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ff4j</groupId>
+            <artifactId>ff4j-store-redis</artifactId>
+            <version>${ff4j.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Gatling -->
+        <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+            <version>${gatling.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>${scala-maven-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
+                <version>${gatling-plugin.version}</version>
+                <configuration>
+                    <runMultipleSimulations>true</runMultipleSimulations>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <scm>
+        <tag>archref-0.0.1</tag>
+    </scm>
+</project>

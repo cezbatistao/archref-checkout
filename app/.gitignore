@@ -1,0 +1,12 @@
+target/
+.idea/
+.vscode/
+*.iml
+.DS_Store
+*~
+/.settings/
+/.project
+logs/
+application-aws-local.yaml
+release.properties
+pom.xml.releaseBackup
