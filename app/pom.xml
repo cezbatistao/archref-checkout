@@ -27,7 +27,7 @@
 
         <archref-checkout-app-gateway.version>0.0.1-SNAPSHOT</archref-checkout-app-gateway.version>
 
-        <liquibase-core.version>3.6.3</liquibase-core.version>
+        <liquibase-core.version>4.8.0</liquibase-core.version>
 
         <logback-gelf.version>0.3</logback-gelf.version>
         <janino.version>2.7.5</janino.version>
