@@ -38,7 +38,7 @@
         <spring-cloud.version>Finchley.SR1</spring-cloud.version>
 
         <hibernate-java8.version>5.1.0.Final</hibernate-java8.version>
-        <mysql-connector-java.version>8.0.15</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
 
         <!-- support libs -->
         <lombok.version>1.16.16</lombok.version>
